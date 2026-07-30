@@ -1,6 +1,6 @@
 # Vision
 
-> Status: Draft v2 · Owner: Product Manager · Last updated: 2026-07-30
+> Status: Approved v1 · Owner: Product Manager · Last updated: 2026-07-30
 >
 > Changelog: v2 revises v1 per review BO-002 — adds a North Star, a
 > Risks & Assumptions section, a concrete success signal, a named beachhead
@@ -29,8 +29,6 @@ framework without teams inventing process of their own.
 > delivery underperforms. They reflect observed patterns rather than validated
 > research, and we will test and refine them as BuildOS is used on real
 > projects.
-
-
 
 Software delivery is still organized around large, human-only teams passing
 work between roles. Context is lost at every handoff, quality depends on the
@@ -135,7 +133,7 @@ We hold this vision with explicit awareness of what could undermine it:
   and artifacts model-agnostic so the framework improves as models do.
 - **Dogfooding risk.** Publicly committing to run BuildOS on itself creates
   credibility exposure if it lags. We treat this as an aspiration and a
-  proof-point rather than a promise (see *What success looks like*).
+  proof-point rather than a promise (see _What success looks like_).
 
 ## Non-goals
 
