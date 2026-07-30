@@ -1,6 +1,6 @@
 # Roadmap
 
-> Status: Draft v1 · Owner: Product Manager · Last updated: 2026-07-30
+> Status: Approved v1 · Owner: Product Manager · Last updated: 2026-07-30
 
 ## Purpose of this roadmap
 
