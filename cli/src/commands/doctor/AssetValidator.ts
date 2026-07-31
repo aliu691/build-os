@@ -33,9 +33,27 @@ export class AssetValidator {
     let missingAssets = 0;
 
     for (const asset of assets) {
-      const assetPath = join(context.projectPath, asset);
+      // Assets follow hybrid snapshot model:
+      // - framework is a directory in buildos/framework
+      // - runtime consists of files in buildos/ (buildos.json, instructions.md, etc)
+      // - other assets (blueprint dirs) are at project root
+      let assetPath: string;
+      let exists = false;
 
-      if (!existsSync(assetPath)) {
+      if (asset === 'framework') {
+        assetPath = join(context.projectPath, 'buildos', 'framework');
+        exists = existsSync(assetPath);
+      } else if (asset === 'runtime') {
+        // Runtime is represented by files in buildos directory
+        // Check for at least buildos.json which is always created
+        assetPath = join(context.projectPath, 'buildos', 'buildos.json');
+        exists = existsSync(assetPath);
+      } else {
+        assetPath = join(context.projectPath, asset);
+        exists = existsSync(assetPath);
+      }
+
+      if (!exists) {
         findings.push({
           severity: 'error',
           category: 'assets',

@@ -31,6 +31,7 @@ import { RuntimeLoader } from './RuntimeLoader.js';
 import { MetadataGenerator } from './MetadataGenerator.js';
 import { ManifestGenerator } from './ManifestGenerator.js';
 import { FileAssembler } from './FileAssembler.js';
+import { getGeneratorVersion } from '../utils/version.js';
 
 export class Generator {
   private validator: Validator;
@@ -139,7 +140,7 @@ export class Generator {
         runtimeAssets.version,
         config.blueprintName,
         blueprintAssets.version,
-        '1.0.0', // Generator version (would be read from package.json in real usage)
+        getGeneratorVersion(),
         '' // Repository URL (would be provided by caller)
       );
 
@@ -173,7 +174,7 @@ export class Generator {
         generatedAssets,
         assemblyResult.stats?.directoriesCreated || 0,
         assemblyResult.stats?.filesCopied || 0,
-        '1.0.0'
+        getGeneratorVersion()
       );
 
       // Step 8: Write manifest
