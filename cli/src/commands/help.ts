@@ -22,6 +22,7 @@ USAGE:
 COMMANDS:
   new               Create a new BuildOS project
   doctor            Diagnose BuildOS project health
+  info              Display BuildOS project information
   --version, -v     Display CLI version
   --help, -h        Display this help
 
@@ -31,10 +32,13 @@ EXAMPLES:
   buildos new myapp --destination ~/projects
   buildos doctor
   buildos doctor --json
+  buildos info
+  buildos info --json
 
 For command-specific help:
   buildos new --help
   buildos doctor --help
+  buildos info --help
 
 DOCUMENTATION:
   https://github.com/anthropics/build-os

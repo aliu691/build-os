@@ -10,6 +10,7 @@ import { displayVersion } from './commands/version.js';
 import { displayHelp } from './commands/help.js';
 import { executeNew } from './commands/new.js';
 import { executeDoctor, displayDoctorHelp } from './commands/doctor.js';
+import { executeInfo, displayInfoHelp } from './commands/info.js';
 
 async function main(): Promise<void> {
   try {
@@ -72,6 +73,16 @@ async function main(): Promise<void> {
     } else if (command === 'doctor') {
       // Execute the 'doctor' command
       const exitCode = await executeDoctor(doctorOptions);
+      process.exit(exitCode);
+    } else if (command === 'info') {
+      // Extract info-specific options
+      const infoOptions = {
+        verbose: process.argv.includes('--verbose') || process.argv.includes('-v'),
+        json: process.argv.includes('--json'),
+        help: process.argv.includes('--help') || process.argv.includes('-h'),
+      };
+      // Execute the 'info' command
+      const exitCode = await executeInfo(infoOptions);
       process.exit(exitCode);
     } else {
       console.error(`✗ Unknown command: ${command}\n`);
