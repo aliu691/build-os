@@ -5,8 +5,13 @@
  * to create BuildOS projects.
  */
 
-import { Generator, GeneratorConfig } from './index';
+import { Generator, GeneratorConfig } from './index.js';
 import { resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 async function exampleUsage() {
   // Configuration for project generation

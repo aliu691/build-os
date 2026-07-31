@@ -12,7 +12,7 @@ import {
   GenerationError,
   ErrorCode,
   GenerationManifest,
-} from './types';
+} from './types.js';
 
 export interface AssemblyStats {
   directoriesCreated: number;

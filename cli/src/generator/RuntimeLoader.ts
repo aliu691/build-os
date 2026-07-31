@@ -4,7 +4,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { RuntimeAssets, LoaderResult, GenerationError, ErrorCode } from './types';
+import { RuntimeAssets, LoaderResult, GenerationError, ErrorCode } from './types.js';
 
 export class RuntimeLoader {
   async load(runtimePath: string): Promise<LoaderResult<RuntimeAssets>> {

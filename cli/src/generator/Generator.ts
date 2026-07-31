@@ -23,14 +23,14 @@ import {
   BlueprintAssets,
   FrameworkAssets,
   RuntimeAssets,
-} from './types';
-import { Validator } from './Validator';
-import { BlueprintLoader } from './BlueprintLoader';
-import { FrameworkLoader } from './FrameworkLoader';
-import { RuntimeLoader } from './RuntimeLoader';
-import { MetadataGenerator } from './MetadataGenerator';
-import { ManifestGenerator } from './ManifestGenerator';
-import { FileAssembler } from './FileAssembler';
+} from './types.js';
+import { Validator } from './Validator.js';
+import { BlueprintLoader } from './BlueprintLoader.js';
+import { FrameworkLoader } from './FrameworkLoader.js';
+import { RuntimeLoader } from './RuntimeLoader.js';
+import { MetadataGenerator } from './MetadataGenerator.js';
+import { ManifestGenerator } from './ManifestGenerator.js';
+import { FileAssembler } from './FileAssembler.js';
 
 export class Generator {
   private validator: Validator;

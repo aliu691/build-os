@@ -4,7 +4,7 @@
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'fs';
 import { join } from 'path';
-import { BlueprintAssets, LoaderResult, GenerationError, ErrorCode } from './types';
+import { BlueprintAssets, LoaderResult, GenerationError, ErrorCode } from './types.js';
 
 export class BlueprintLoader {
   async load(blueprintPath: string, blueprintName: string): Promise<LoaderResult<BlueprintAssets>> {

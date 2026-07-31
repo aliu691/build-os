@@ -4,7 +4,7 @@
 
 import { existsSync, statSync } from 'fs';
 import { dirname } from 'path';
-import { GeneratorConfig, ValidationResult, GenerationError, ErrorCode } from './types';
+import { GeneratorConfig, ValidationResult, GenerationError, ErrorCode } from './types.js';
 
 export class Validator {
   validate(config: GeneratorConfig): ValidationResult {

@@ -5,7 +5,7 @@
  * enabling future commands to understand project state without filesystem inspection.
  */
 
-import { GenerationManifest, VersionMetadata } from './types';
+import { GenerationManifest, VersionMetadata } from './types.js';
 
 export class ManifestGenerator {
   generate(

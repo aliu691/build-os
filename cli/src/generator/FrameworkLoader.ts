@@ -4,7 +4,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { FrameworkAssets, LoaderResult, GenerationError, ErrorCode } from './types';
+import { FrameworkAssets, LoaderResult, GenerationError, ErrorCode } from './types.js';
 
 export class FrameworkLoader {
   async load(frameworkPath: string): Promise<LoaderResult<FrameworkAssets>> {

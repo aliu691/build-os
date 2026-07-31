@@ -77,13 +77,18 @@ export class ArgumentParser {
         parsed.repository = args[i + 1];
         i += 2;
       } else if (arg.startsWith('-')) {
-        return {
-          args: parsed,
-          error: {
-            message: `Unknown option: ${arg}`,
-            code: 'UNKNOWN_OPTION',
-          },
-        };
+        // Skip unknown options - they will be handled by specific commands
+        // Check if this is an option that takes a value
+        if (arg.includes('=')) {
+          // Option with = like --option=value
+          i++;
+        } else if (i + 1 < args.length && !args[i + 1].startsWith('-')) {
+          // Option that might take a value
+          i += 2;
+        } else {
+          // Flag option
+          i++;
+        }
       } else {
         // Positional argument (project name)
         if (!parsed.command) {
@@ -103,11 +108,16 @@ export class ArgumentParser {
       }
     }
 
-    // If first positional is 'new', treat next as project name
+    // Handle command routing
+    const validCommands = ['new', 'doctor', 'info', 'upgrade'];
+
     if (parsed.command === 'new' && parsed.projectName) {
       // This is the standard case: `buildos new projectname`
-    } else if (parsed.command && !parsed.projectName && parsed.command !== 'new') {
-      // If first positional is not 'new', treat it as the command/project name
+    } else if (parsed.command && validCommands.includes(parsed.command)) {
+      // This is a valid command (doctor, info, upgrade)
+      // Keep it as is, no project name needed
+    } else if (parsed.command && !parsed.projectName && !validCommands.includes(parsed.command)) {
+      // First positional is not a recognized command, treat it as project name for 'new'
       parsed.projectName = parsed.command;
       parsed.command = 'new';
     }

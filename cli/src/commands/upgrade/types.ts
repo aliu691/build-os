@@ -15,13 +15,18 @@ export interface UpgradePlan {
 
 export interface UpgradeAction {
   id: string;
-  type: 'framework' | 'runtime' | 'metadata' | 'manifest';
+  type: "framework" | "runtime" | "metadata" | "manifest" | "blueprint";
   description: string;
   files?: string[];
 }
 
 export interface UpgradeReport {
-  status: 'no_upgrades' | 'upgrade_available' | 'upgrade_applied' | 'upgrade_failed' | 'validation_failed';
+  status:
+    | "no_upgrades"
+    | "upgrade_available"
+    | "upgrade_applied"
+    | "upgrade_failed"
+    | "validation_failed";
   current: VersionInfo;
   available?: VersionInfo;
   plan?: UpgradePlan;

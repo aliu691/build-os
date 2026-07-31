@@ -2,7 +2,7 @@
  * MetadataGenerator: Generates version metadata for buildos.json
  */
 
-import { VersionMetadata } from './types';
+import { VersionMetadata } from './types.js';
 
 export class MetadataGenerator {
   generate(
