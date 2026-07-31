@@ -9,6 +9,7 @@ import { ArgumentParser } from './parser/ArgumentParser.js';
 import { displayVersion } from './commands/version.js';
 import { displayHelp } from './commands/help.js';
 import { executeNew } from './commands/new.js';
+import { executeDoctor, displayDoctorHelp } from './commands/doctor.js';
 
 async function main(): Promise<void> {
   try {
@@ -32,6 +33,13 @@ async function main(): Promise<void> {
       displayHelp(args.command);
       process.exit(0);
     }
+
+    // Extract doctor-specific options from args
+    const doctorOptions = {
+      verbose: process.argv.includes('--verbose') || process.argv.includes('-v'),
+      json: process.argv.includes('--json'),
+      help: process.argv.includes('--help') || process.argv.includes('-h'),
+    };
 
     // Default to 'new' command if no command specified
     const command = args.command || 'new';
@@ -60,6 +68,10 @@ async function main(): Promise<void> {
         repository: args.repository,
       });
 
+      process.exit(exitCode);
+    } else if (command === 'doctor') {
+      // Execute the 'doctor' command
+      const exitCode = await executeDoctor(doctorOptions);
       process.exit(exitCode);
     } else {
       console.error(`✗ Unknown command: ${command}\n`);
