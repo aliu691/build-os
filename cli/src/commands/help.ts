@@ -23,6 +23,7 @@ COMMANDS:
   new               Create a new BuildOS project
   doctor            Diagnose BuildOS project health
   info              Display BuildOS project information
+  upgrade           Upgrade BuildOS projects
   --version, -v     Display CLI version
   --help, -h        Display this help
 
@@ -34,11 +35,14 @@ EXAMPLES:
   buildos doctor --json
   buildos info
   buildos info --json
+  buildos upgrade
+  buildos upgrade --plan
 
 For command-specific help:
   buildos new --help
   buildos doctor --help
   buildos info --help
+  buildos upgrade --help
 
 DOCUMENTATION:
   https://github.com/anthropics/build-os

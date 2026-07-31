@@ -11,6 +11,7 @@ import { displayHelp } from './commands/help.js';
 import { executeNew } from './commands/new.js';
 import { executeDoctor, displayDoctorHelp } from './commands/doctor.js';
 import { executeInfo, displayInfoHelp } from './commands/info.js';
+import { executeUpgrade, displayUpgradeHelp } from './commands/upgrade.js';
 
 async function main(): Promise<void> {
   try {
@@ -83,6 +84,20 @@ async function main(): Promise<void> {
       };
       // Execute the 'info' command
       const exitCode = await executeInfo(infoOptions);
+      process.exit(exitCode);
+    } else if (command === 'upgrade') {
+      // Extract upgrade-specific options
+      const upgradeOptions = {
+        check: process.argv.includes('--check'),
+        plan: process.argv.includes('--plan'),
+        apply: process.argv.includes('--apply'),
+        dryRun: process.argv.includes('--dry-run'),
+        json: process.argv.includes('--json'),
+        verbose: process.argv.includes('--verbose') || process.argv.includes('-v'),
+        help: process.argv.includes('--help') || process.argv.includes('-h'),
+      };
+      // Execute the 'upgrade' command
+      const exitCode = await executeUpgrade(upgradeOptions);
       process.exit(exitCode);
     } else {
       console.error(`✗ Unknown command: ${command}\n`);
