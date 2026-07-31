@@ -80,3 +80,40 @@ export interface ValidationResult {
   valid: boolean;
   errors: GenerationError[];
 }
+
+export interface GenerationContext {
+  config: GeneratorConfig;
+  blueprintAssets?: BlueprintAssets;
+  frameworkAssets?: FrameworkAssets;
+  runtimeAssets?: RuntimeAssets;
+  metadata?: VersionMetadata;
+}
+
+export interface GeneratorHooks {
+  preGenerate?: (context: GenerationContext) => Promise<void>;
+  postGenerate?: (result: GenerationResult) => Promise<void>;
+}
+
+export interface GenerationManifest {
+  generatorVersion: string;
+  generatedAt: string;
+  framework: {
+    version: string;
+    commit: string;
+  };
+  runtime: {
+    version: string;
+  };
+  blueprint: {
+    name: string;
+    version: string;
+  };
+  project: {
+    name: string;
+  };
+  assets: string[];
+  summary: {
+    directoriesCreated: number;
+    filesCopied: number;
+  };
+}

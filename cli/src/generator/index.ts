@@ -10,12 +10,16 @@ export { BlueprintLoader } from './BlueprintLoader';
 export { FrameworkLoader } from './FrameworkLoader';
 export { RuntimeLoader } from './RuntimeLoader';
 export { MetadataGenerator } from './MetadataGenerator';
+export { ManifestGenerator } from './ManifestGenerator';
 export { FileAssembler } from './FileAssembler';
 
 export type {
   GeneratorConfig,
   GenerationResult,
   GenerationError,
+  GenerationContext,
+  GeneratorHooks,
+  GenerationManifest,
   VersionMetadata,
   ValidationResult,
   BlueprintAssets,

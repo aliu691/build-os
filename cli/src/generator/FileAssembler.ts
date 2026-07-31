@@ -4,19 +4,40 @@
 
 import { mkdirSync, copyFileSync, writeFileSync } from 'fs';
 import { dirname, join, relative } from 'path';
-import { BlueprintAssets, FrameworkAssets, RuntimeAssets, VersionMetadata, GenerationError, ErrorCode } from './types';
+import {
+  BlueprintAssets,
+  FrameworkAssets,
+  RuntimeAssets,
+  VersionMetadata,
+  GenerationError,
+  ErrorCode,
+  GenerationManifest,
+} from './types';
+
+export interface AssemblyStats {
+  directoriesCreated: number;
+  filesCopied: number;
+}
 
 export class FileAssembler {
+  private stats: AssemblyStats = {
+    directoriesCreated: 0,
+    filesCopied: 0,
+  };
+
   async assemble(
     destinationPath: string,
     blueprintAssets: BlueprintAssets,
     frameworkAssets: FrameworkAssets,
     runtimeAssets: RuntimeAssets,
     metadata: VersionMetadata
-  ): Promise<{ success: boolean; error?: GenerationError }> {
+  ): Promise<{ success: boolean; stats?: AssemblyStats; error?: GenerationError }> {
     try {
+      // Reset stats for this assembly
+      this.stats = { directoriesCreated: 0, filesCopied: 0 };
+
       // Create project root
-      mkdirSync(destinationPath, { recursive: true });
+      this.createDirectory(destinationPath);
 
       // 1. Copy blueprint structure (directories)
       await this.createBlueprintStructure(destinationPath, blueprintAssets);
@@ -33,7 +54,7 @@ export class FileAssembler {
       // 5. Create placeholder directories for customization
       await this.createCustomizationDirectories(destinationPath);
 
-      return { success: true };
+      return { success: true, stats: this.stats };
     } catch (err) {
       return {
         success: false,
@@ -46,46 +67,67 @@ export class FileAssembler {
     }
   }
 
+  async writeManifest(destinationPath: string, manifest: GenerationManifest): Promise<{ success: boolean; error?: GenerationError }> {
+    try {
+      const manifestPath = join(destinationPath, 'buildos', 'generation-manifest.json');
+      const content = JSON.stringify(manifest, null, 2);
+      writeFileSync(manifestPath, content, 'utf-8');
+      return { success: true };
+    } catch (err) {
+      return {
+        success: false,
+        error: {
+          code: ErrorCode.FAILED_FILE_COPY,
+          message: 'Failed to write generation manifest',
+          details: err instanceof Error ? err.message : String(err),
+        },
+      };
+    }
+  }
+
+  private createDirectory(path: string): void {
+    mkdirSync(path, { recursive: true });
+    this.stats.directoriesCreated++;
+  }
+
+  private copyFile(srcPath: string, destPath: string): void {
+    const destDir = dirname(destPath);
+    this.createDirectory(destDir);
+    copyFileSync(srcPath, destPath);
+    this.stats.filesCopied++;
+  }
+
   private async createBlueprintStructure(destinationPath: string, blueprintAssets: BlueprintAssets): Promise<void> {
     // Create blueprint directories in project root
     for (const dir of blueprintAssets.directories) {
       const dirPath = join(destinationPath, dir);
-      mkdirSync(dirPath, { recursive: true });
+      this.createDirectory(dirPath);
     }
 
     // Copy blueprint files
     for (const [relPath, srcPath] of blueprintAssets.files.entries()) {
       const destPath = join(destinationPath, relPath);
-      const destDir = dirname(destPath);
-
-      mkdirSync(destDir, { recursive: true });
-      copyFileSync(srcPath, destPath);
+      this.copyFile(srcPath, destPath);
     }
   }
 
   private async copyRuntimeAssets(destinationPath: string, runtimeAssets: RuntimeAssets): Promise<void> {
     const buildosPath = join(destinationPath, 'buildos');
-    mkdirSync(buildosPath, { recursive: true });
+    this.createDirectory(buildosPath);
 
     for (const [relPath, srcPath] of runtimeAssets.files.entries()) {
       const destPath = join(buildosPath, relPath);
-      const destDir = dirname(destPath);
-
-      mkdirSync(destDir, { recursive: true });
-      copyFileSync(srcPath, destPath);
+      this.copyFile(srcPath, destPath);
     }
   }
 
   private async copyFrameworkSnapshot(destinationPath: string, frameworkAssets: FrameworkAssets): Promise<void> {
     const frameworkDestPath = join(destinationPath, 'buildos', 'framework');
-    mkdirSync(frameworkDestPath, { recursive: true });
+    this.createDirectory(frameworkDestPath);
 
     for (const [relPath, srcPath] of frameworkAssets.files.entries()) {
       const destPath = join(frameworkDestPath, relPath);
-      const destDir = dirname(destPath);
-
-      mkdirSync(destDir, { recursive: true });
-      copyFileSync(srcPath, destPath);
+      this.copyFile(srcPath, destPath);
     }
   }
 
@@ -93,6 +135,7 @@ export class FileAssembler {
     const buildosJsonPath = join(destinationPath, 'buildos', 'buildos.json');
     const content = JSON.stringify(metadata, null, 2);
     writeFileSync(buildosJsonPath, content, 'utf-8');
+    this.stats.filesCopied++;
   }
 
   private async createCustomizationDirectories(destinationPath: string): Promise<void> {
@@ -103,11 +146,12 @@ export class FileAssembler {
     ];
 
     for (const dir of customizationDirs) {
-      mkdirSync(dir, { recursive: true });
+      this.createDirectory(dir);
 
       // Create .gitkeep to ensure directories are tracked by git
       const gitkeepPath = join(dir, '.gitkeep');
       writeFileSync(gitkeepPath, '', 'utf-8');
+      this.stats.filesCopied++;
     }
   }
 }

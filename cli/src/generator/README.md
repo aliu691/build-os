@@ -34,9 +34,151 @@ The Generator is the core engine responsible for:
     ├── MetadataGenerator
     │   └── Creates version metadata
     │
+    ├── ManifestGenerator
+    │   └── Creates generation manifest
+    │
     └── FileAssembler
         └── Writes files to destination
 ```
+
+## Lifecycle Hooks
+
+The Generator supports optional lifecycle hooks for extensibility:
+
+```typescript
+interface GeneratorHooks {
+  preGenerate?(context: GenerationContext): Promise<void>;
+  postGenerate?(result: GenerationResult): Promise<void>;
+}
+```
+
+### PreGenerate Hook
+
+Executed **before validation starts**.
+
+Use cases:
+- Custom setup or initialization
+- Environment preparation
+- Validation of external conditions
+
+```typescript
+const hooks: GeneratorHooks = {
+  preGenerate: async (context) => {
+    console.log(`Preparing to generate: ${context.config.projectName}`);
+  }
+};
+
+const generator = new Generator(hooks);
+```
+
+### PostGenerate Hook
+
+Executed **after successful generation** (after manifest is written).
+
+Use cases:
+- Git initialization
+- Dependency installation
+- Project registration
+- Analytics or telemetry
+- Automated setup
+
+```typescript
+const hooks: GeneratorHooks = {
+  postGenerate: async (result) => {
+    if (result.success) {
+      console.log(`Project created at ${result.projectPath}`);
+      // Could initialize git, install dependencies, etc.
+    }
+  }
+};
+
+const generator = new Generator(hooks);
+```
+
+**Note:** If a postGenerate hook fails, the generation is still considered successful. Hook errors are logged but don't fail the generation.
+
+### Registering Hooks
+
+Hooks can be provided at construction time or set later:
+
+```typescript
+// At construction
+const generator = new Generator(hooks);
+
+// Or later
+generator.setHooks(hooks);
+```
+
+### Hook Optional Behavior
+
+If no hooks are registered:
+- Generator behaves exactly as before
+- No performance impact
+- Zero changes to behavior
+
+## Generation Manifest
+
+Every generated project includes a generation manifest at `buildos/generation-manifest.json`.
+
+The manifest records:
+- Generator version that created the project
+- Timestamp of generation
+- Framework version and commit
+- Runtime version
+- Blueprint name and version
+- Project name
+- Generated assets list
+- Generation statistics
+
+### Example Manifest
+
+```json
+{
+  "generatorVersion": "1.0.0",
+  "generatedAt": "2026-07-31T09:45:00.000Z",
+  "framework": {
+    "version": "1.0.0",
+    "commit": "4e6349b"
+  },
+  "runtime": {
+    "version": "1.0.0"
+  },
+  "blueprint": {
+    "name": "saas",
+    "version": "saas-1.0.0"
+  },
+  "project": {
+    "name": "my-app"
+  },
+  "assets": [
+    "framework",
+    "runtime",
+    "backend",
+    "frontend",
+    "docs",
+    ".github"
+  ],
+  "summary": {
+    "directoriesCreated": 47,
+    "filesCopied": 92
+  }
+}
+```
+
+### Purpose
+
+The manifest enables future BuildOS commands to:
+- Determine how a project was generated
+- Validate project structure without filesystem inspection
+- Plan framework upgrades based on current version
+- Track project lifecycle and changes
+- Provide accurate diagnostics
+
+Future commands that use the manifest:
+- `buildos doctor` — Validate project health
+- `buildos info` — Show project information
+- `buildos upgrade` — Upgrade framework version
+- `buildos validate` — Check governance compliance
 
 ## Components
 
