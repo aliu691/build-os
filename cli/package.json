@@ -1,0 +1,32 @@
+{
+  "name": "@buildos/cli",
+  "version": "1.1.0",
+  "description": "BuildOS CLI - AI-native project generation and management",
+  "main": "dist/index.js",
+  "bin": {
+    "buildos": "dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "test": "jest",
+    "lint": "eslint src"
+  },
+  "keywords": [
+    "buildos",
+    "project-generation",
+    "ai",
+    "framework"
+  ],
+  "author": "BuildOS",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

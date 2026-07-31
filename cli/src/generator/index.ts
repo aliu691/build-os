@@ -4,14 +4,14 @@
  * Exports the core Generator and types for building BuildOS projects
  */
 
-export { Generator } from './Generator';
-export { Validator } from './Validator';
-export { BlueprintLoader } from './BlueprintLoader';
-export { FrameworkLoader } from './FrameworkLoader';
-export { RuntimeLoader } from './RuntimeLoader';
-export { MetadataGenerator } from './MetadataGenerator';
-export { ManifestGenerator } from './ManifestGenerator';
-export { FileAssembler } from './FileAssembler';
+export { Generator } from './Generator.js';
+export { Validator } from './Validator.js';
+export { BlueprintLoader } from './BlueprintLoader.js';
+export { FrameworkLoader } from './FrameworkLoader.js';
+export { RuntimeLoader } from './RuntimeLoader.js';
+export { MetadataGenerator } from './MetadataGenerator.js';
+export { ManifestGenerator } from './ManifestGenerator.js';
+export { FileAssembler } from './FileAssembler.js';
 
 export type {
   GeneratorConfig,
@@ -26,6 +26,6 @@ export type {
   FrameworkAssets,
   RuntimeAssets,
   LoaderResult,
-} from './types';
+} from './types.js';
 
-export { ErrorCode } from './types';
+export { ErrorCode } from './types.js';
